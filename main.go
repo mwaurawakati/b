@@ -79,7 +79,9 @@ func (t *Trader) trade(payload TradingViewWebhookPayload) {
 		if payload.Action == "buy" {
 			t.side = "buy"
 			candles, _ := t.cli.Candles("SOLUSD", 1, time.Now().Add(time.Second).Unix())
-			limitPrice, _ := candles.Candles["SOLUSD"][0].Close.Float64()
+			tickerRES, _:= t.cli.Ticker("SOLUSD")
+			limitPrice,_ := tickerRES["SOLUSD"].Bid.Price.Float64()
+			_, _ = candles.Candles["SOLUSD"][0].Close.Float64()
 			zusd, _ := bals["ZUSD"].Float64()
 			quantity := (zusd * 0.95) / limitPrice
 			_, err := t.cli.AddOrder("SOLUSD",
@@ -104,22 +106,32 @@ func (t *Trader) trade(payload TradingViewWebhookPayload) {
 		return
 	} else {
 		// exit trade
-		t.cli.CancelAll()
+		bals, err := t.cli.GetAccountBalances()
+		if err != nil {
+			slog.Error("Error getting account balances", "error", err)
+			t.mu.Unlock()
+			return
+		}
+		sols, _ := bals["SOL"].Float64()
+		_, err = t.cli.AddOrder("SOLUSD",
+				"sell",
+				"market",
+				sols,
+				map[string]any{
+					//"price":            limitPrice + 0.05,
+					//"price2":           limitPrice + 2.5,
+					//"close[ordertype]": "stop-price",
+					// "close[price]":     limitPrice - 0.05,
+				})
+			if err != nil {
+				slog.Error("error placing buy trade", "error", err)
+			}
+		//t.cli.CancelAll()
 		t.side = ""
 		t.mu.Unlock()
 
 	}
-	spread, err := t.cli.GetSpread("ADAETH", 0)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	log.Println(spread)
-
-	tm, err := t.cli.Time()
-	if err != nil {
-		log.Fatalln(err)
-	}
-	log.Println(tm)
+	
 }
 
-func placeOrder(price float64)
+func placeOrder(price float64){}
