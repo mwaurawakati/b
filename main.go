@@ -102,6 +102,8 @@ func (t *Trader) trade(payload TradingViewWebhookPayload) {
 				slog.Error("error placing buy trade", "error", err)
 			}
 			t.mu.Unlock()
+		}else{
+			t.mu.Unlock()
 		}
 
 	} else if strings.ToLower(payload.Action) == t.side {
