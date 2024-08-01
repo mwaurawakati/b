@@ -50,6 +50,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 var B Trader
 
 func main() {
+	slog.SetLogLoggerLevel(slog.LevelDebug)
 	api := rest.New("EIXlKfdefCBbrB1aO3LN/ma51012MCy8WjoXgaAWfxwF934RphyvGE22", "sfAh5ycZIW2Xl8Zd8peAr1UlZjPrqMhG5SyfJFzgu60xNlN9ZI9mEF+nFTUfv3MfCkvqlhtpOrZ+A352dohoVQ==")
 	B = Trader{cli: api}
 	http.HandleFunc("/webhook", webhookHandler)
