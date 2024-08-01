@@ -27,12 +27,14 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 	// Ensure the request method is POST
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		slog.Debug("invalid method")
 		return
 	}
 
 	// Parse the JSON payload
 	var payload TradingViewWebhookPayload
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+		slog.Debug("invalid json", "error", err)
 		http.Error(w, "Invalid JSON payload", http.StatusBadRequest)
 		return
 	}
