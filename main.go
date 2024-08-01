@@ -40,7 +40,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	go B.trade(payload)
 	// Process the payload
-	fmt.Printf("Received webhook: Event=%s, Price=%.2f, Message=%s\n", payload.Event, payload.Price, payload.Message)
+	fmt.Printf("Received webhook: Event=%s, Price=%.2f, Message=%s, Action=%s\n", payload.Event, payload.Price, payload.Message, payload.Action)
 
 	// Respond to TradingView
 	w.WriteHeader(http.StatusOK)
@@ -72,6 +72,7 @@ type Trader struct {
 func (t *Trader) trade(payload TradingViewWebhookPayload) {
 	t.mu.Lock()
 	if t.side == "" {
+		slog.Info("no trade. Trading...")
 		// No running trades
 		bals, err := t.cli.GetAccountBalances()
 		if err != nil {
