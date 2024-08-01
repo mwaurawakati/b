@@ -90,7 +90,7 @@ func (t *Trader) trade(payload TradingViewWebhookPayload) {
 			quantity := (zusd * 0.95) / limitPrice
 			_, err := t.cli.AddOrder("SOLUSD",
 				"buy",
-				"take-profit-limit",
+				"limit",
 				quantity,
 				map[string]any{
 					"price":            limitPrice + 0.05,
