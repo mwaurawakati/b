@@ -83,8 +83,8 @@ func (t *Trader) trade(payload TradingViewWebhookPayload) {
 		if payload.Action == "buy" {
 			t.side = "buy"
 			candles, _ := t.cli.Candles("SOLUSD", 1, time.Now().Add(time.Second).Unix())
-			tickerRES, _:= t.cli.Ticker("SOLUSD")
-			limitPrice,_ := tickerRES["SOLUSD"].Bid.Price.Float64()
+			tickerRES, _ := t.cli.Ticker("SOLUSD")
+			limitPrice, _ := tickerRES["SOLUSD"].Bid.Price.Float64()
 			_, _ = candles.Candles["SOLUSD"][0].Close.Float64()
 			zusd, _ := bals["ZUSD"].Float64()
 			quantity := (zusd * 0.95) / limitPrice
@@ -93,7 +93,7 @@ func (t *Trader) trade(payload TradingViewWebhookPayload) {
 				"limit",
 				quantity,
 				map[string]any{
-					"price":            limitPrice + 0.05,
+					"price": limitPrice + 0.05,
 					//"price2":           limitPrice + 2.5,
 					//"close[ordertype]": "stop-price",
 					// "close[price]":     limitPrice - 0.05,
@@ -102,7 +102,7 @@ func (t *Trader) trade(payload TradingViewWebhookPayload) {
 				slog.Error("error placing buy trade", "error", err)
 			}
 			t.mu.Unlock()
-		}else{
+		} else {
 			t.mu.Unlock()
 		}
 
@@ -118,26 +118,27 @@ func (t *Trader) trade(payload TradingViewWebhookPayload) {
 			t.mu.Unlock()
 			return
 		}
+		tickerRES, _ := t.cli.Ticker("SOLUSD")
+		limitPrice, _ := tickerRES["SOLUSD"].Bid.Price.Float64()
 		sols, _ := bals["SOL"].Float64()
 		_, err = t.cli.AddOrder("SOLUSD",
-				"sell",
-				"market",
-				sols,
-				map[string]any{
-					//"price":            limitPrice + 0.05,
-					//"price2":           limitPrice + 2.5,
-					//"close[ordertype]": "stop-price",
-					// "close[price]":     limitPrice - 0.05,
-				})
-			if err != nil {
-				slog.Error("error placing buy trade", "error", err)
-			}
+			"sell",
+			"stop-loss-limit",
+			sols,
+			map[string]any{
+				"price":  limitPrice - 0.03,
+				"price2": limitPrice - 0.03,
+				//"close[ordertype]": "stop-price",
+				// "close[price]":     limitPrice - 0.05,
+			})
+		if err != nil {
+			slog.Error("error placing buy trade", "error", err)
+		}
 		//t.cli.CancelAll()
 		t.side = ""
 		t.mu.Unlock()
 
 	}
-	
+
 }
 
-func placeOrder(price float64){}
