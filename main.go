@@ -127,7 +127,7 @@ func (t *Trader) trade(payload TradingViewWebhookPayload) {
 			sols,
 			map[string]any{
 				"price":  limitPrice - 0.01,
-				"price2": limitPrice - 0.01``,
+				"price2": limitPrice - 0.01,
 				//"close[ordertype]": "stop-price",
 				// "close[price]":     limitPrice - 0.05,
 			})
