@@ -118,7 +118,7 @@ func fetchCoinbaseData(url string, wg *sync.WaitGroup, prices chan<- float64) {
 	prices <- priceFloat
 }
 
-var data = NewCircularBuffer(zPeriod)
+var data = NewCircularBuffer(zPeriod + 1)
 
 func main() {
 	slog.SetLogLoggerLevel(slog.LevelDebug)
