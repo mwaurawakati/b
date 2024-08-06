@@ -163,7 +163,7 @@ func main() {
 		slog.Info("Price Difference: ", "price", priceDifference)
 		data.Add(priceDifference)
 		if data.Full() {
-			_, _, zScore, atrZScore := calculateIndicators([]float64{priceDifference})
+			_, _, zScore, atrZScore := calculateIndicators(data.Values())
 
 			// Define strategy conditions
 			longCondition := zScore < -threshold && atrZScore < -threshold
