@@ -5,6 +5,7 @@ go 1.22.5
 require (
 	github.com/aopoltorzhicky/go_kraken v0.2.3
 	github.com/gorilla/websocket v1.5.1
+	github.com/markcheno/go-talib v0.0.0-20190307022042-cd53a9264d70
 	github.com/pkg/errors v0.9.1
 	github.com/shopspring/decimal v1.3.1
 	github.com/sirupsen/logrus v1.9.3
