@@ -132,7 +132,7 @@ func main() {
 	defer ticker.Stop()
 
 	for range ticker.C {
-		startTime := time.Now()
+		//startTime := time.Now()
 
 		var wg sync.WaitGroup
 		prices := make(chan float64, 2)
@@ -158,9 +158,9 @@ func main() {
 
 		// Calculate and print the price difference
 		priceDifference := krakenPrice - coinbasePrice
-		slog.Info("Kraken Price: ", "price", krakenPrice)
-		slog.Info("Coinbase Price: ", "price", coinbasePrice)
-		slog.Info("Price Difference: ", "price", priceDifference)
+		//slog.Info("Kraken Price: ", "price", krakenPrice)
+		//slog.Info("Coinbase Price: ", "price", coinbasePrice)
+		//slog.Info("Price Difference: ", "price", priceDifference)
 		data.Add(priceDifference)
 		if data.Full() {
 			_, _, zScore, atrZScore := calculateIndicators(data.Values())
@@ -181,11 +181,11 @@ func main() {
 			}
 
 			// Plotting and alerting logic can be implemented similarly using libraries or APIs that support these features
-			slog.Info("Strategy executed")
+			//slog.Info("Strategy executed")
 		}
 		// Calculate and print the time taken
-		elapsedTime := time.Since(startTime)
-		slog.Info("Time taken:", "time", elapsedTime)
+		//elapsedTime := time.Since(startTime)
+		//slog.Info("Time taken:", "time", elapsedTime)
 	}
 }
 
@@ -254,12 +254,13 @@ func (t *Trader) trade(action string) {
 		}
 		if action == "buy" {
 			t.side = "buy"
-			candles, _ := t.cli.Candles("SOLUSD", 1, time.Now().Add(time.Second).Unix())
+			//candles, _ := t.cli.Candles("SOLUSD", 1, time.Now().Add(time.Second).Unix())
 			tickerRES, _ := t.cli.Ticker("SOLUSD")
 			limitPrice, _ := tickerRES["SOLUSD"].Bid.Price.Float64()
-			_, _ = candles.Candles["SOLUSD"][0].Close.Float64()
+			//_, _ = candles.Candles["SOLUSD"][0].Close.Float64()
 			zusd, _ := bals["ZUSD"].Float64()
 			quantity := (zusd * 0.95) / limitPrice
+			slog.Info("placing a buy", "volume", quantity, "price", limitPrice, "allbalances", bals)
 			_, err := t.cli.AddOrder("SOLUSD",
 				"buy",
 				"limit",
