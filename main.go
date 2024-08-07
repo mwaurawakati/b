@@ -32,7 +32,7 @@ const (
 	coinbaseSymbol      = "SOLUSD"
 	zPeriod             = 35
 	atrPeriod           = 35
-	threshold           = 1.95
+	threshold           = 2
 	zScoreExitThreshold = 1
 	accountBalance      = 2500
 )
