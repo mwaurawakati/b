@@ -295,9 +295,11 @@ func (t *Trader) trade(action string) {
 		tickerRES, _ := t.cli.Ticker("SOLUSD")
 		limitPrice, _ := tickerRES["SOLUSD"].Bid.Price.Float64()
 		sols, _ := bals["SOL"].Float64()
+		slog.Info("placing a sell(exit)", "volume", sols, "price", limitPrice, "allbalances", bals)
+
 		_, err = t.cli.AddOrder("SOLUSD",
 			"sell",
-			"stop-loss-limit",
+			"market",
 			sols,
 			map[string]any{
 				"price":  limitPrice - 0.03,
