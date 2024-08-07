@@ -32,8 +32,8 @@ const (
 	coinbaseSymbol      = "SOLUSD"
 	zPeriod             = 35
 	atrPeriod           = 35
-	threshold           = 0
-	zScoreExitThreshold = 0
+	threshold           = 1.95
+	zScoreExitThreshold = 1.95
 	accountBalance      = 2500
 )
 
@@ -267,6 +267,7 @@ func (t *Trader) trade(action string) {
 				quantity,
 				map[string]any{
 					"price": limitPrice + 0.01,
+					"expiretm":"+15",
 					//"price2":           limitPrice + 2.5,
 					//"close[ordertype]": "stop-price",
 					// "close[price]":     limitPrice - 0.05,
