@@ -300,13 +300,13 @@ func (t *Trader) trade(action string) {
 			"stop-loss-limit",
 			sols,
 			map[string]any{
-				"price":  limitPrice - 0.01,
-				"price2": limitPrice - 0.01,
+				"price":  limitPrice - 0.03,
+				"price2": limitPrice - 0.03,
 				//"close[ordertype]": "stop-price",
 				// "close[price]":     limitPrice - 0.05,
 			})
 		if err != nil {
-			slog.Error("error placing buy trade", "error", err)
+			slog.Error("error placing sell(exit) trade", "error", err)
 		}
 		//t.cli.CancelAll()
 		t.side = ""
